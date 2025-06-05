@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -23,4 +25,6 @@ public class Question {
     private String option4;
     private String rightAnswer;
     private String difficultyLevel;
+
+
 }
