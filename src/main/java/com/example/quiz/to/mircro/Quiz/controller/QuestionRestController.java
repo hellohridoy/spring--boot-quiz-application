@@ -24,13 +24,22 @@ public class QuestionRestController {
 
     @GetMapping("/all-question/{difficultyLevel}")
     public ResponseEntity<List<Question>> getAllQuestionByDifficultyLevel(@PathVariable String difficultyLevel) {
+        if (difficultyLevel.equals(null)) {
+            throw new IllegalArgumentException("Difficulty Level cannot be null");
+        }
         ResponseEntity<List<Question>> questions = questionService.getAllQuestionByDifficultyLevel(difficultyLevel);
         return ResponseEntity.ok(questions.getBody());
     }
 
     @PostMapping("/add-question")
     public ResponseEntity<String> addQuestion(@RequestBody Question question) {
+        if (question == null) {
+            throw new IllegalArgumentException("Question cannot be null");
+        }
         String result = String.valueOf(questionService.addQuestion(question));
+        if (result.equals(null)) {
+            throw new IllegalArgumentException("Question cannot be null");
+        }
         return ResponseEntity.ok(result);
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,8 +23,19 @@ public class QuizController {
         @RequestParam int numberOfQuestion,
         @RequestParam String tittle
 
+
     ) {
-        return quizService.createQuiz(difficultyLevel, numberOfQuestion, tittle);
+
+        if(numberOfQuestion>50){
+            return ResponseEntity.badRequest().body("Number of question is greater than 50");
+        }
+        if (tittle==null){
+            return ResponseEntity.badRequest().body("Title is null");
+        }
+        if (difficultyLevel.equals("easy")||difficultyLevel.equals("medium")||difficultyLevel.equals("hard")) {
+            return quizService.createQuiz(difficultyLevel, numberOfQuestion, tittle);
+
+        }else throw new IllegalArgumentException("Difficulty level must be easy or hard or medium");
     }
 
     @GetMapping("/api/v1/quiz/get/{id}/quiz-question")
@@ -35,7 +47,7 @@ public class QuizController {
 
 
     @PostMapping("/api/v1/quiz/question-submit/{id}")
-    public ResponseEntity<Integer> submitQuizQuestion(
+    public ResponseEntity<Map<String, Object>> submitQuizQuestion(
         @PathVariable Integer id,
         @RequestBody List<Response> responses) {
         return quizService.calculateResult(id,responses);
