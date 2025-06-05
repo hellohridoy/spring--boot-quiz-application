@@ -32,16 +32,23 @@ public class QuizController {
         if (tittle==null){
             return ResponseEntity.badRequest().body("Title is null");
         }
-        if (difficultyLevel.equals("easy")||difficultyLevel.equals("medium")||difficultyLevel.equals("hard")) {
-            return quizService.createQuiz(difficultyLevel, numberOfQuestion, tittle);
+        String level = difficultyLevel.toLowerCase(); // Normalize to lowercase
 
-        }else throw new IllegalArgumentException("Difficulty level must be easy or hard or medium");
+        if (level.equals("easy") || level.equals("medium") || level.equals("hard")) {
+            return quizService.createQuiz(level, numberOfQuestion, tittle);
+        } else {
+            return ResponseEntity.badRequest().body("Invalid difficulty level. Allowed: easy, medium, hard");
+        }
+
     }
 
     @GetMapping("/api/v1/quiz/get/{id}/quiz-question")
     public ResponseEntity<List<QuestionDto>> getQuizQuestion(
         @PathVariable Integer id
     ) {
+        if(id==null){
+            return ResponseEntity.badRequest().body(null);
+        }
         return quizService.getQuizQuestions(id);
     }
 
@@ -50,6 +57,14 @@ public class QuizController {
     public ResponseEntity<Map<String, Object>> submitQuizQuestion(
         @PathVariable Integer id,
         @RequestBody List<Response> responses) {
+        if (id == null || id <= 0) {
+            return ResponseEntity.badRequest().body(null); // ID must be non-null and positive
+        }
+
+        if(responses==null){
+            return ResponseEntity.badRequest().body(null);
+        }
+
         return quizService.calculateResult(id,responses);
 
     }
