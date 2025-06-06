@@ -27,12 +27,12 @@ public class QuizController {
     ) {
 
         if(numberOfQuestion>50){
-            return ResponseEntity.badRequest().body("Number of question is greater than 50");
+            return ResponseEntity.badRequest().body("Number of question is cant,t greater than 50");
         }
         if (tittle==null){
             return ResponseEntity.badRequest().body("Title is null");
         }
-        String level = difficultyLevel.toLowerCase(); // Normalize to lowercase
+        String level = difficultyLevel.toLowerCase();
 
         if (level.equals("easy") || level.equals("medium") || level.equals("hard")) {
             return quizService.createQuiz(level, numberOfQuestion, tittle);
@@ -58,7 +58,7 @@ public class QuizController {
         @PathVariable Integer id,
         @RequestBody List<Response> responses) {
         if (id == null || id <= 0) {
-            return ResponseEntity.badRequest().body(null); // ID must be non-null and positive
+            return ResponseEntity.badRequest().body(null);
         }
 
         if(responses==null){

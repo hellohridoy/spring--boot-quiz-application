@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -48,4 +49,16 @@ public class QuestionService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add question");
         }
     }
+
+    public ResponseEntity<List<Question>> getRandomQuestionsByTopic(String topic, int limit) {
+        try {
+            List<Question> questions = questionRepository.getRandomQuestionsByTopic(topic, limit);
+            return ResponseEntity.ok(questions);
+        } catch (Exception e) {
+            log.error("Error fetching random questions by topic: {}", topic, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
+        }
+    }
+
+
 }

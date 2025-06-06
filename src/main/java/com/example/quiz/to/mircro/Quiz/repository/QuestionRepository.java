@@ -17,4 +17,10 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
     @Query(value = "SELECT * FROM question WHERE difficulty_level = :difficultyLevel ORDER BY random() LIMIT :limit", nativeQuery = true)
     List<Question> getRandomQuestions(@Param("difficultyLevel") String difficultyLevel, @Param("limit") int limit);
 
+
+    @Query(value = "SELECT * FROM question WHERE LOWER(topic) = LOWER(:topic) ORDER BY random() LIMIT :limit", nativeQuery = true)
+    List<Question> getRandomQuestionsByTopic(@Param("topic") String topic, @Param("limit") int limit);
+
+
+
 }
